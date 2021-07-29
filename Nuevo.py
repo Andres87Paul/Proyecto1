@@ -1,5 +1,1 @@
 print("NUEVO")
-print("OK")
-print("OK")
-print("OK")
-print("OK")
