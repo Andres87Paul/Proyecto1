@@ -63,7 +63,7 @@ class Usuarios:
         self.clave = clave
 
     def getUsua(self):
-            return self.usuario+" " +self.clave
+            return self.usuario+"    "+self.clave
 
     def getUser(self):
             return self.usuario

@@ -27,3 +27,10 @@ class Gestion:
                 break
         return lis
 
+    def getPosicionUsua(self,usuario,lista):
+        pos = -1
+        for i in range(len(lista)):
+            if usuario == lista[i].usuario:
+                pos = i
+                break
+        return pos

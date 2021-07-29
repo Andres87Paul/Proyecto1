@@ -6,6 +6,7 @@ from Proyecto1.Archivos.Archivos import *
 import colorama
 from colorama import Fore, Back, Style
 colorama.init(autoreset=True)
+from tkinter import *
 import os
 import sys
 
@@ -65,7 +66,7 @@ class Core2:
         print("\t ******MENU DE OPCIONES******")
         print("                                \n")
 
-        tupla=("REGISTRAR CLIENTES","CONSULTAR CLIENTES","ACTUALIZAR CLIENTES","ELIMINAR CLIENTES","LISTAR CLIENTES","INTEGRANTES","SALIR")
+        tupla=("REGISTRAR CLIENTES","CONSULTAR CLIENTES","ACTUALIZAR CLIENTES","ELIMINAR CLIENTES","LISTAR CLIENTES","SEGURIDAD","INTEGRANTES","SALIR")
         op = self.ObM.menu(tupla)
 
 
@@ -91,10 +92,14 @@ class Core2:
             self.listar()
             self.main()
         if op == 6:
+            print("*************SEGURIDAD**************\n")
+            self.usuarios()
+            self.main()
+        if op == 7:
             print("*************INTEGRANTES**************\n")
             self.integrantes()
             self.main()
-        if op == 7:
+        if op == 8:
             print("*****SALIR******")
             self.limpiar()
 
@@ -102,7 +107,7 @@ class Core2:
 
         cedula =   input("INGRESAR CEDULA: ")
 
-        self.lista = self.ObA.listaclientes("SEGUNDOA.csv")
+        self.lista = self.ObA.listaclientes("CLIENTES.csv")
         pos = self.ObG.getPosicion(cedula, self.lista)
         if pos == -1:
 
@@ -115,7 +120,7 @@ class Core2:
             # self.lista.append(obC1)
             registro = obC1.cedula+";"+obC1.nombre+";"+obC1.edad+";"\
             +obC1.empresa+";"+obC1.telefono+";\n"
-            self.ObA.insertar("SEGUNDOA.csv",registro,"a")
+            self.ObA.insertar("CLIENTES.csv",registro,"a")
             self.barra()
             print("REGISTROS GUARDADOS CON EXITO")
         else:
@@ -124,7 +129,7 @@ class Core2:
 
     def listar(self):
         # ADICIONADO PARA MANEJO DE FILE
-        self.lista = self.ObA.listaclientes("SEGUNDOA.csv")
+        self.lista = self.ObA.listaclientes("CLIENTES.csv")
 
         for i in range(len(self.lista)):
             # print(self.lista[i].getDatos())
@@ -135,7 +140,7 @@ class Core2:
     def consultar(self):
         cedula=input("INGRESE CEDULA: ")
         # ADICIONADO PARA MANEJO DE FILE
-        self.lista = self.ObA.listaclientes("SEGUNDOA.csv")
+        self.lista = self.ObA.listaclientes("CLIENTES.csv")
         obj=self.ObG.gestiondatos(cedula,self.lista)
         if obj!=None:
             self.barra()
@@ -147,7 +152,7 @@ class Core2:
 
     def actualizar(self):
         cedula = input("INGRESE CEDULA: ")
-        self.lista = self.ObA.listaclientes("SEGUNDOA.csv")
+        self.lista = self.ObA.listaclientes("CLIENTES.csv")
         pos = self.ObG.getPosicion(cedula, self.lista)
         if pos>-1:
             print(self.lista[pos].getDatos())
@@ -169,13 +174,13 @@ class Core2:
                       + self.lista[i].empresa + ";" \
                       + self.lista[i].telefono + ";\n"
             # print(msg)
-            self.ObA.insertar("SEGUNDOA.csv", msg, "w")
+            self.ObA.insertar("CLIENTES.csv", msg, "w")
             self.barra()
             print("REGISTROS GRABADOS CON EXITO")
 
     def eliminar(self):
         cedula = input("INGRESE CEDULA: ")
-        self.lista = self.ObA.listaclientes("SEGUNDOA.csv")
+        self.lista = self.ObA.listaclientes("CLIENTES.csv")
         pos = self.ObG.getPosicion(cedula, self.lista)
         if pos>-1:
             print(self.lista[pos].getDatos())
@@ -189,13 +194,59 @@ class Core2:
                       + self.lista[i].empresa + ";" \
                       + self.lista[i].telefono + ";\n"
             # print(msg)
-            self.ObA.insertar("SEGUNDOA.csv", msg, "w")
+            self.ObA.insertar("CLIENTES.csv", msg, "w")
 
             self.barra()
             print("REGISTRO ELIMINADO CON EXITO")
         else:
             self.barra()
             print("CEDULA NO EXISTE")
+
+    def usuarios(self):
+        tupla = ("CREAR USUARIOS", "CONSULTAR USUARIOS")
+        op = self.ObM.menu(tupla)
+
+        if op == 1:
+            print("*****CREAR USUARIOS******")
+            self.registraUsuarios()
+            self.main()
+        if op == 2:
+            print("*****CONSULTAR USUARIOS******")
+            self.listarUsuarios()
+            self.main()
+
+    def registraUsuarios(self):
+
+        usuario =   input("INGRESAR USUARIO: ")
+
+        self.lista = self.ObA.listausuarios("USUARIOS.csv")
+        pos = self.ObG.getPosicionUsua(usuario, self.lista)
+        if pos == -1:
+            clave =   input("INGRESAR CLAVE: ")
+
+            obC1 = Usuarios(usuario,clave)
+            # self.lista.append(obC1)
+            registro = obC1.usuario+";"+obC1.clave+";\n"
+            self.ObA.insertarusuario("USUARIOS.csv",registro,"a")
+            self.barra()
+            print("REGISTROS GUARDADOS CON EXITO")
+        else:
+            print("USUARIO YA EXISTE")
+        input("<ENTER>PARA CONTINUAR...")
+
+
+    def listarUsuarios(self):
+        # ADICIONADO PARA MANEJO DE FILE
+        self.lista = self.ObA.listausuarios("USUARIOS.csv")
+        print("***********************")
+        print("USUARIO"+"  "+"CLAVE")
+        print("***********************")
+        for i in range(len(self.lista)):
+            # print(self.lista[i].getDatos())
+            # self.barra()
+            print(self.lista[i].getUsua())
+        input("<ENTER>PARA CONTINUAR...")
+
 
     def integrantes(self):
         self.barra()
@@ -217,11 +268,8 @@ class Core2:
         for i in tqdm(range(10)):
             time.sleep(0.1)
 
-     # def limpiar(self):
-     #
-     #     import os
-     #     clear = lambda: os.system('cls')
-     #     clear()
+
+
 
 
 

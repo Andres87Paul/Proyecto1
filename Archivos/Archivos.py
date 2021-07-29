@@ -33,3 +33,8 @@ class Archivo:
         except:
             print("ERROR DE LECTURA")
         return lista
+
+    def insertarusuario(self,nombre,datos,modo):
+        archivo = open(nombre,modo)
+        archivo.write(datos)
+        archivo.close()
